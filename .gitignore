@@ -1,0 +1,9 @@
+notepad.exe .gitignore
+```
+
+Pega esto y guarda con **Ctrl+S**:
+```
+credentials.json
+token.json
+client_secret*.json
+*.txt
