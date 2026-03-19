@@ -1,5 +1,5 @@
 Chart.register(ChartDataLabels);
-const API = "http://127.0.0.1:5000";
+const API = "https://ulsabox-backend.onrender.com";
 let chart;
 
 async function loadUser() {
