@@ -1,23 +1,54 @@
-Chart.register(ChartDataLabels);
+﻿Chart.register(ChartDataLabels);
 const API = "https://ulsabox-backend.onrender.com";
 let chart;
 
+async function checkAuth() {
+  const params = new URLSearchParams(window.location.search);
+  if (params.get("auth") === "success") {
+    window.history.replaceState({}, document.title, window.location.pathname);
+    loadUser();
+    analyzeEmails();
+  } else {
+    try {
+      const res = await fetch(API + "/usuario", { credentials: "include" });
+      if (res.ok) {
+        loadUser();
+        analyzeEmails();
+      } else {
+        showLogin();
+      }
+    } catch {
+      showLogin();
+    }
+  }
+}
+
+function showLogin() {
+  document.getElementById("login-section").style.display = "flex";
+  document.getElementById("main-content").style.display = "none";
+}
+
+function connectGmail() {
+  window.location.href = API + "/login";
+}
+
 async function loadUser() {
   try {
-    const res = await fetch(API + "/usuario");
+    const res = await fetch(API + "/usuario", { credentials: "include" });
     const data = await res.json();
     document.getElementById("user-email").textContent = data.email;
     document.getElementById("user-name").textContent = data.nombre;
+    document.getElementById("login-section").style.display = "none";
+    document.getElementById("main-content").style.display = "block";
   } catch {
-    document.getElementById("user-email").textContent = "saulferrerapaulino6@gmail.com";
-    document.getElementById("user-name").textContent = "Usuario";
+    showLogin();
   }
 }
 
 async function analyzeEmails() {
   addActivity("Conectando con Gmail...");
   try {
-    const res = await fetch(API + "/correos");
+    const res = await fetch(API + "/correos", { credentials: "include" });
     const correos = await res.json();
 
     let important = 0;
@@ -43,7 +74,7 @@ async function analyzeEmails() {
     createRemitentes(remitentes);
 
     correos.forEach(correo => {
-      addActivity(`📧 [${correo.categoria}] ${correo.asunto}`);
+      addActivity("📧 [" + correo.categoria + "] " + correo.asunto);
     });
 
   } catch (error) {
@@ -80,7 +111,7 @@ function createChart(categorias, total) {
             font: { size: 12 },
             generateLabels: (chart) => {
               return chart.data.labels.map((label, i) => ({
-                text: `${label}   ${Math.round(values[i] / total * 100)}%`,
+                text: label + "   " + Math.round(values[i] / total * 100) + "%",
                 fillStyle: colors[i],
                 strokeStyle: colors[i],
                 lineWidth: 0,
@@ -109,16 +140,7 @@ function createRemitentes(remitentes) {
 
   container.innerHTML = sorted.map(([nombre, count]) => {
     const pct = Math.round(count / max * 100);
-    return `
-      <div style="margin-bottom:14px">
-        <div style="display:flex;justify-content:space-between;margin-bottom:4px">
-          <span style="font-size:13px;color:#374151">${nombre.substring(0, 28)}</span>
-          <span style="font-size:13px;font-weight:600;color:#374151">${count}</span>
-        </div>
-        <div style="background:#e5e7eb;border-radius:10px;height:8px">
-          <div style="background:#3b82f6;width:${pct}%;height:8px;border-radius:10px;transition:width 0.8s"></div>
-        </div>
-      </div>`;
+    return "<div style='margin-bottom:14px'><div style='display:flex;justify-content:space-between;margin-bottom:4px'><span style='font-size:13px;color:#374151'>" + nombre.substring(0, 28) + "</span><span style='font-size:13px;font-weight:600;color:#374151'>" + count + "</span></div><div style='background:#e5e7eb;border-radius:10px;height:8px'><div style='background:#3b82f6;width:" + pct + "%;height:8px;border-radius:10px;transition:width 0.8s'></div></div></div>";
   }).join("");
 }
 
@@ -143,5 +165,4 @@ function animate(id, value) {
   }, 30);
 }
 
-// Cargar usuario al iniciar
-loadUser();
+checkAuth();

@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8">
@@ -11,6 +11,21 @@
 </head>
 <body class="bg-gradient-to-br from-slate-100 via-blue-50 to-indigo-100 min-h-screen p-6">
 
+  <!-- LOGIN SCREEN -->
+  <div id="login-section" style="display:none" class="min-h-screen flex items-center justify-center">
+    <div class="bg-white rounded-2xl shadow-lg p-10 max-w-md w-full text-center">
+      <img src="https://upload.wikimedia.org/wikipedia/commons/7/7e/Gmail_icon_%282020%29.svg" class="w-12 h-12 mx-auto mb-4">
+      <h1 class="text-2xl font-bold text-gray-800 mb-2">Bienvenido a Ulsabox</h1>
+      <p class="text-gray-400 text-sm mb-8">Conecta tu Gmail para analizar y organizar tu bandeja de entrada.</p>
+      <button onclick="connectGmail()" class="w-full bg-blue-500 hover:bg-blue-600 text-white font-semibold py-3 px-6 rounded-xl transition flex items-center justify-center gap-3">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/7/7e/Gmail_icon_%282020%29.svg" class="w-5 h-5">
+        Conectar con Gmail
+      </button>
+    </div>
+  </div>
+
+  <!-- MAIN DASHBOARD -->
+  <div id="main-content" style="display:none">
   <div class="max-w-5xl mx-auto">
 
     <!-- NAVBAR -->
@@ -32,7 +47,7 @@
       <div class="flex justify-between items-start mb-6">
         <div>
           <h2 class="text-2xl font-bold text-gray-800">Hola, <span id="user-name">Usuario</span></h2>
-          <p class="text-sm text-gray-400 mt-1">Mantén tu bandeja de entrada limpia y organizada.</p>
+          <p class="text-sm text-gray-400 mt-1">Manten tu bandeja de entrada limpia y organizada.</p>
         </div>
         <div class="flex flex-col gap-2">
           <button onclick="analyzeEmails()" class="flex items-center gap-2 bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-medium transition">
@@ -69,7 +84,7 @@
         </div>
       </div>
 
-      <p class="text-xs text-gray-400 mb-6">Última ejecución: hace 1 hora</p>
+      <p class="text-xs text-gray-400 mb-6">Ultima ejecucion: hace 1 hora</p>
 
       <!-- MAIN GRID -->
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -90,6 +105,7 @@
       <ul id="activity" class="space-y-2"></ul>
     </div>
 
+  </div>
   </div>
 
   <script src="script.js"></script>
